@@ -4,7 +4,6 @@ package pee.actionbar.app;
 import android.app.Activity;
 import android.os.Bundle;
 
-import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +15,8 @@ import com.loopj.android.http.SaxAsyncHttpResponseHandler;
 import org.apache.http.Header;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
+
+import java.util.List;
 
 
 public class MainActivity extends Activity {
@@ -100,7 +101,7 @@ public class MainActivity extends Activity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         SaxAsyncHttpResponseHandler saxAsyncHttpResponseHandler = null;
-        saxAsyncHttpResponseHandler = new SaxAsyncHttpResponseHandler<SAXTreeStructure>(new SAXTreeStructure()) {
+        saxAsyncHttpResponseHandler = new SaxAsyncHttpResponseHandler<SiteUrlSet>(new SiteUrlSet()) {
 
             @Override
             public void onStart() {
@@ -108,15 +109,17 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void onSuccess(int i, Header[] headers, SAXTreeStructure saxTreeStructure) {
+            public void onSuccess(int i, Header[] headers, SiteUrlSet siteUrlSet) {
                 Log.i(TAG, "inside onSuccess()");
-
-                Log.i(TAG, "saxTreeStructure.toString(): " + saxTreeStructure.toString());
-
+                List<SiteUrl> siteUrlList = siteUrlSet.getSiteUrlList();
+                Log.i(TAG, "siteUrlList.size(): "+siteUrlList.size());
+                for(SiteUrl siteUrl : siteUrlList){
+                    Log.i(TAG, "siteUrl: "+siteUrl);
+                }
             }
 
             @Override
-            public void onFailure(int i, Header[] headers, SAXTreeStructure saxTreeStructure) {
+            public void onFailure(int i, Header[] headers, SiteUrlSet siteUrlSet) {
                 Log.i(TAG, "inside onFailure()");
             }
         };
